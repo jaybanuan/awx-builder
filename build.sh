@@ -15,7 +15,7 @@ git clone -b $AWX_BRANCH https://github.com/ansible/awx.git awx-${AWX_BRANCH}
     python3 -m venv venv
     source venv/bin/activate
 
-    pip3 install docker-compose ansible setuptools_scm
+    pip3 install wheel setuptools_scm docker-compose ansible
 
     export PYTHON=python3
     make docker-compose-build SHELL=/bin/bash
