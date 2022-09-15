@@ -1,4 +1,4 @@
-name: build and push container image
+name: Build AWX workflow
 on:
   workflow_dispatch:
     inputs:
@@ -8,8 +8,8 @@ on:
         default: '21.2.0'
 
 jobs:
-  build_and_push:
-    name: build and push container image
+  build_awx:
+    name: Build AWX job
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
