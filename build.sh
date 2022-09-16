@@ -9,7 +9,7 @@ test -n "${AWX_BRANCH}" || {
 
 git clone -b $AWX_BRANCH https://github.com/ansible/awx.git awx-${AWX_BRANCH}
 
-pip3 update requests
+pip3 install -U requests
 pip3 install docker-compose ansible "setuptools_scm[toml]"
 
 (
