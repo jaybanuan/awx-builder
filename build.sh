@@ -20,7 +20,7 @@ pip3 install docker-compose ansible
     export VENV_BASE=$(pwd)/venv_base
 
     make requirements_dev
-    make docker-compose-build SHELL=/bin/bash
+    make SHELL=/bin/bash docker-compose-build
 #    python3 -m venv venv
 #    source venv/bin/activate
 #    pip3 install docker-compose ansible
