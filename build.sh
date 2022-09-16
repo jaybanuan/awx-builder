@@ -19,7 +19,7 @@ pip3 install docker-compose ansible "setuptools_scm[toml]"
     export PYTHON=python3
     export VENV_BASE=$(pwd)/venv_base
 
-    make requirements_dev
+    make virtualenv #requirements_dev
     make SHELL=/bin/bash docker-compose-build
 #    python3 -m venv venv
 #    source venv/bin/activate
