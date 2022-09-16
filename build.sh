@@ -16,9 +16,5 @@ pip3 install docker-compose ansible "setuptools_scm[toml]"
     echo "----- build -------------------------------------------------------- "
 
     cd awx-${AWX_BRANCH}
-
-    export PYTHON=python3
-    export VENV_BASE=$(pwd)/venv_base
-
-    make SHELL=/bin/bash docker-compose-build
+    make SHELL=/bin/bash PYTHON=python3 docker-compose-build
 )
