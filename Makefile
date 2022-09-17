@@ -30,9 +30,17 @@ clone: check_awx_branch_name
 build: check_awx_branch_name
 	pip3 install -U requests urllib3
 	pip3 install docker-compose ansible "setuptools_scm[toml]"
+	docker image ls
 	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-build
+	docker image ls
 
 
 .PHONY: up
 up: check_awx_branch_name
 	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
+
+
+.PHONY: build-ui
+build-ui:
+	docker exec tools_awx_1 make clean-ui ui-devel
+	docker exec -ti tools_awx_1 awx-manage createsuperuser
