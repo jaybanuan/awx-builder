@@ -18,3 +18,5 @@ pip3 install docker-compose ansible "setuptools_scm[toml]"
     cd awx-${AWX_BRANCH}
     make SHELL=/bin/bash PYTHON=python3 docker-compose-build
 )
+
+docker image ls
