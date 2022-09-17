@@ -5,7 +5,7 @@ on:
       AWX_BRANCH:
         description: Version number
         required: true
-        default: '21.2.0'
+        default: '21.6.0'
 
 jobs:
   build_awx:
