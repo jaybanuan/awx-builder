@@ -2,8 +2,8 @@ name: Build AWX workflow
 on:
   workflow_dispatch:
     inputs:
-      AWX_BRANCH:
-        description: Version number
+      AWX_BRANCH_NAME:
+        description: AWX branch name
         required: true
         default: '21.6.0'
 
