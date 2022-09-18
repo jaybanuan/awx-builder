@@ -31,7 +31,7 @@ build: check_awx_branch_name
 	pip3 install -U requests urllib3
 	pip3 install docker-compose ansible "setuptools_scm[toml]"
 	docker image ls
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-build
+	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-sources docker-compose-build
 	docker image ls
 
 
