@@ -1,0 +1,31 @@
+##############################################################################
+# Targets
+
+.PHONY: build-impl
+build-impl:
+	pip3 install -U requests urllib3
+	pip3 install docker-compose ansible "setuptools_scm[toml]"
+	docker image ls
+	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-sources docker-compose-build
+	docker image ls
+
+
+.PHONY: up-impl
+up-impl: check_awx_branch_name
+	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
+
+
+.PHONY: build-ui-impl
+build-ui-impl:
+	docker exec tools_awx_1 make clean-ui ui-devel
+	docker exec -ti tools_awx_1 awx-manage createsuperuser
+
+
+.PHONY: start-impl
+start-impl:
+	echo "before-18 start-impl: do nothing."
+
+
+.PHONY: stop-impl
+start-impl:
+	echo "before-18 stop-impl: do nothing."

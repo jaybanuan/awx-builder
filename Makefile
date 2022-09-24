@@ -4,6 +4,23 @@
 export SHELL ?= /bin/bash
 export PYTHON ?= python3
 
+AWX_ADMIN_USERNAME ?= awx
+AWX_ADMIN_PASSWORD ?= awx
+
+AWX_SRC_DIR := awx-$(AWX_BRANCH_NAME)
+
+
+##############################################################################
+# Include
+
+AWX_INSTALLER_FLAG := $(shell test "$(shell printf "$(AWX_BRANCH_NAME)\n18.0.0" | sort -V | head -n 1)" != "18.0.0"; echo $$?)
+
+ifeq ($(AWX_INSTALLER_FLAG),1)
+include Makefile-since-18
+else
+include Makefile-before-18
+endif
+
 
 ##############################################################################
 # Targets
@@ -23,24 +40,30 @@ check_awx_branch_name:
 
 .PHONY: clone
 clone: check_awx_branch_name
-	git clone -b $(AWX_BRANCH_NAME) https://github.com/ansible/awx.git awx-$(AWX_BRANCH_NAME)
+	git clone -b $(AWX_BRANCH_NAME) https://github.com/ansible/awx.git $(AWX_SRC_DIR)
 
 
 .PHONY: build
-build: check_awx_branch_name
-	pip3 install -U requests urllib3
-	pip3 install docker-compose ansible "setuptools_scm[toml]"
-	docker image ls
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-sources docker-compose-build
-	docker image ls
-
-
-.PHONY: up
-up: check_awx_branch_name
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
+build: check_awx_branch_name build-impl
 
 
 .PHONY: build-ui
-build-ui:
+build-ui: build-ui-impl
 	docker exec tools_awx_1 make clean-ui ui-devel
 	docker exec -ti tools_awx_1 awx-manage createsuperuser
+
+
+.PHONY: up
+up: check_awx_branch_name up-impl
+
+
+.PHONY: down
+down: check_awx_branch_name down-impl
+
+
+.PHONY: start
+start: check_awx_branch_name start-impl
+
+
+.PHONY: stop
+stop: check_awx_branch_name stop-impl

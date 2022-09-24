@@ -1,0 +1,50 @@
+##############################################################################
+# Variables
+
+AWX_HOME_DIR := ~/.awx
+AWX_POSTGRES_DATA_DIR := $(AWX_HOME_DIR)/pgdocker-$(AWX_BRANCH_NAME)
+AWX_DOCKER_COMPOSE_DIR := $(AWX_HOME_DIR)/awxcompose-$(AWX_BRANCH_NAME)
+
+
+##############################################################################
+# Targets
+
+.PHONY: build-impl
+build-impl:
+	echo "before-18 build-impl"
+
+	sed -i -r 's#^(postgres_data_dir=)(.*)$$#\1"'$(AWX_POSTGRES_DATA_DIR)'"#g'   $(AWX_SRC_DIR)/installer/inventory
+	sed -i -r 's#^(docker_compose_dir=)(.*)$$#\1"'$(AWX_DOCKER_COMPOSE_DIR)'"#g' $(AWX_SRC_DIR)/installer/inventory
+
+	sed -i -r 's/^(admin_user=)(.*)$$/\1'$(AWX_ADMIN_USERNAME)'/g'               $(AWX_SRC_DIR)/installer/inventory
+	sed -i -r 's/^(# *)?(admin_password=)(.*)$$/\2'$(AWX_ADMIN_PASSWORD)'/g'     $(AWX_SRC_DIR)/installer/inventory
+
+# The ansible task "docker_service" had been replaced with "docker_compose".
+	sed -i -r 's/^( +)docker_service:$$/\1docker_compose:/g'                    $(AWX_SRC_DIR)/installer/roles/local_docker/tasks/main.yml
+
+	cd $(AWX_SRC_DIR)/installer; ansible-playbook -i inventory install.yml
+
+
+.PHONY: build-ui-impl
+build-ui-impl:
+	echo "before-18 build-ui-impl: do nothing."
+
+
+.PHONY: up-impl
+up-impl: check_awx_branch_name
+	cd $(AWX_DOCKER_COMPOSE_DIR); docker-compose up
+
+
+.PHONY: down-impl
+down-impl: check_awx_branch_name
+	cd $(AWX_DOCKER_COMPOSE_DIR); docker-compose down
+
+
+.PHONY: start-impl
+start-impl:
+	cd $(AWX_DOCKER_COMPOSE_DIR); docker-compose start
+
+
+.PHONY: stop-impl
+stop-impl:
+	cd $(AWX_DOCKER_COMPOSE_DIR); docker-compose stop
