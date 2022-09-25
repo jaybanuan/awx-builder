@@ -10,22 +10,27 @@ build-impl:
 	docker image ls
 
 
-.PHONY: up-impl
-up-impl: check_awx_branch_name
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
-
-
 .PHONY: build-ui-impl
 build-ui-impl:
 	docker exec tools_awx_1 make clean-ui ui-devel
 	docker exec -ti tools_awx_1 awx-manage createsuperuser
 
 
+.PHONY: up-impl
+up-impl: check_awx_branch_name
+	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
+
+
+.PHONY: up-impl
+up-impl: check_awx_branch_name
+	cd tools/docker-compose/_sources; docker-compose down
+
+
 .PHONY: start-impl
 start-impl:
-	echo "before-18 start-impl: do nothing."
+	cd tools/docker-compose/_sources; docker-compose start
 
 
 .PHONY: stop-impl
 stop-impl:
-	echo "before-18 stop-impl: do nothing."
+	cd tools/docker-compose/_sources; docker-compose stop
