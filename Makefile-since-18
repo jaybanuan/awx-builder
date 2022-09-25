@@ -21,16 +21,16 @@ up-impl: check_awx_branch_name
 	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
 
 
-.PHONY: up-impl
-up-impl: check_awx_branch_name
-	cd tools/docker-compose/_sources; docker-compose down
+.PHONY: down-impl
+down-impl: check_awx_branch_name
+	cd $(AWX_SRC_DIR)/tools/docker-compose/_sources; docker-compose down
 
 
 .PHONY: start-impl
 start-impl:
-	cd tools/docker-compose/_sources; docker-compose start
+	cd $(AWX_SRC_DIR)/tools/docker-compose/_sources; docker-compose start
 
 
 .PHONY: stop-impl
 stop-impl:
-	cd tools/docker-compose/_sources; docker-compose stop
+	cd $(AWX_SRC_DIR)/tools/docker-compose/_sources; docker-compose stop
