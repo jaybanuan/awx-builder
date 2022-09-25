@@ -49,8 +49,6 @@ build: check_awx_branch_name build-impl
 
 .PHONY: build-ui
 build-ui: build-ui-impl
-	docker exec tools_awx_1 make clean-ui ui-devel
-	docker exec -ti tools_awx_1 awx-manage createsuperuser
 
 
 .PHONY: up
