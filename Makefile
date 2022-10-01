@@ -30,8 +30,8 @@ clean:
 	echo "do nothing."
 
 
-.PHONY: check_awx_branch_name
-check_awx_branch_name:
+.PHONY: check-awx-branch-name
+check-awx-branch-name:
 	test -n "$(AWX_BRANCH_NAME)" || { \
 		echo "The variable 'AWX_BRANCH_NAME' must be specified."; \
 		exit 1; \
@@ -39,12 +39,16 @@ check_awx_branch_name:
 
 
 .PHONY: clone
-clone: check_awx_branch_name
+clone: clone-awx clone-postprocess
+
+
+.PHONY: clone-awx
+clone-awx: check-awx-branch-name
 	git clone -b $(AWX_BRANCH_NAME) https://github.com/ansible/awx.git $(AWX_SRC_DIR)
 
 
 .PHONY: build
-build: check_awx_branch_name build-impl
+build: check-awx-branch-name build-impl
 
 
 .PHONY: build-ui
@@ -52,16 +56,16 @@ build-ui: build-ui-impl
 
 
 .PHONY: up
-up: check_awx_branch_name up-impl
+up: check-awx-branch-name up-impl
 
 
 .PHONY: down
-down: check_awx_branch_name down-impl
+down: check-awx-branch-name down-impl
 
 
 .PHONY: start
-start: check_awx_branch_name start-impl
+start: check-awx-branch-name start-impl
 
 
 .PHONY: stop
-stop: check_awx_branch_name stop-impl
+stop: check-awx-branch-name stop-impl

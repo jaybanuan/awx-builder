@@ -1,12 +1,21 @@
 ##############################################################################
 # Targets
 
+.PHONY: clone-postprocess
+clone-postprocess:
+# WORKAROUND:
+# see https://github.com/ansible/awx/issues/12266
+# see https://qiita.com/shimauma_Zzzzz/items/c656d1da6a16e5e406e3
+	sed -i -r 's/^( *)command: openssl genrsa -out/\1command: openssl genrsa -traditional -out/g' $(AWX_SRC_DIR)/tools/docker-compose/ansible/roles/sources/tasks/main.yml
+	sed -i -r 's/^( *)command: openssl rsa -in/\1command: openssl rsa -traditional -in/g'         $(AWX_SRC_DIR)/tools/docker-compose/ansible/roles/sources/tasks/main.yml
+
+
 .PHONY: build-impl
 build-impl:
 	pip3 install -U requests urllib3
 	pip3 install docker-compose ansible "setuptools_scm[toml]"
 	docker image ls
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose-build
+	$(MAKE) -C $(AWX_SRC_DIR) docker-compose-build
 	docker image ls
 
 
@@ -17,12 +26,13 @@ build-ui-impl:
 
 
 .PHONY: up-impl
-up-impl: check_awx_branch_name
-	$(MAKE) -C awx-${AWX_BRANCH_NAME} docker-compose
+up-impl: check-awx-branch-name
+	rm -rf $(AWX_SRC_DIR)/tools/docker-compose/_sources
+	$(MAKE) -C $(AWX_SRC_DIR) docker-compose
 
 
 .PHONY: down-impl
-down-impl: check_awx_branch_name
+down-impl: check-awx-branch-name
 	cd $(AWX_SRC_DIR)/tools/docker-compose/_sources; docker-compose down
 
 
