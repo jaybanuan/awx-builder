@@ -18,6 +18,12 @@ sudo ln -s /usr/bin/python3 /usr/bin/python
 
 
 ##############################################################################
+# install ansible
+
+pip3 install ansible
+
+
+##############################################################################
 # install docker
 
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
